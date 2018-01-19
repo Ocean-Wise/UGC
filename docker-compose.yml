@@ -1,0 +1,30 @@
+version: '2'
+services:
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        app_env: ${APP_ENV}
+    volumes:
+      - ./frontend/:/frontend/
+    ports:
+      - "3000:3000" # For development
+      #- "80:3000" # For production
+    depends_on:
+      - db
+    links:
+      - db
+
+  db:
+    build:
+      context: ./db
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/pgdata:/pgdata
+    ports:
+      - "5432"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=d8h*_z6a#SJ=cFfw
+      - PGDATA=/pgdata
