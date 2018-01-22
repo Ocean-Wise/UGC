@@ -5,7 +5,35 @@
 //   promiseLib: promise,
 // };
 
-// Python Twitter
+// Import the instagram library
+const ig = require('instagram-node').instagram();
+
+// Config Instagram client settings
+ig.use({
+  client_id: 'c60bd6880ab04a36994ce043decf1525',
+  client_secret: 'b6747394d8774f5b91cbf3a33345b333',
+});
+
+// Set the Instagram OAuth redirectUri and initialize the accessToken store
+const redirectUri = 'http://172.19.1.14:3000/api/instaAuth';
+let accessToken;
+
+// Handle the redirection to Instagram's login
+function handleInstaAuth(req, res) {
+  // Set the scope of our application to be able to access likes and public content
+  res.redirect(ig.get_authorization_url(redirectUri, { scope: ['public_content', 'likes'] }));
+}
+
+// Handle the authorization of the user who just logged in and store the retreived access token into our store
+function handleInstaHandled(req, res) {
+  ig.authorize_user(req.query.code, redirectUri, (err, result) => {
+    if (err) res.send(err);
+    accessToken = result.access_token;
+    res.redirect('/');
+  });
+}
+
+// Import library to run Python scripts on the server
 const PythonShell = require('python-shell');
 
 // const cn = {
@@ -77,7 +105,7 @@ function handleGetTwitter(req, res) {
 // }
 
 module.exports = {
-  // getPledges: handleGetLatestPledges,
-  // addPledge: handleAddPledge,
+  instaAuth: handleInstaAuth,
+  instaHandled: handleInstaHandled,
   getTwitter: handleGetTwitter,
 };
