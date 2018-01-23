@@ -5,11 +5,9 @@
 */
 
 import React from 'react';
+import Paper from 'material-ui/Paper';
 import PropTypes from 'prop-types';
 import P from 'components/P';
-import Container from './Container';
-import Paper from 'material-ui/Paper';
-// import styled from 'styled-components';
 
 
 class InstagramTile extends React.Component { // eslint-disable-line react/prefer-stateless-function
