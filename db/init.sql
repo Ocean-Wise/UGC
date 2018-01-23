@@ -3,13 +3,13 @@ CREATE DATABASE ugc;
 
 \c ugc;
 
-CREATE TABLE test_search (
+CREATE TABLE ocean (
   ID SERIAL PRIMARY KEY,
-  Source VARCHAR,
+  PostType VARCHAR,
   TextContent VARCHAR,
   ContentURL VARCHAR,
   Author VARCHAR
 );
 
-INSERT INTO test_search (Source, TextContent, ContentURL, Author)
+INSERT INTO ocean (PostType, TextContent, ContentURL, Author)
   VALUES('twitter', 'This is a post on #twitter', 'https://twitter.com/', '@ethan_dinnen');

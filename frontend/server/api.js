@@ -3,10 +3,13 @@ const router = express.Router();
 
 const api = require('./queries');
 
-
-// router.get('/authorize', api.instaAuth);
-// router.get('/instaAuth', api.instaHandled);
-router.post('/getTag', api.getTag);
-router.get('/twitter', api.getTwitter);
+router.post('/getInsta', api.getTag); // Get all Instagram posts with hashtag
+router.post('/getTwitter', api.getTwitter); // Get all Twitter posts with hashtag
+router.get('/getTrackedTags', api.getTrackedTags); // Get all tracked hashtags
+router.post('/approvedPosts', api.getApproved); // Get all approved posts with hashtag
+router.post('/approve', api.approvePost); // Approve a post
+router.delete('/approve', api.removePost); // Un-approve a post
+router.post('/tracker', api.newTracker); // Track a new hashtag
+router.delete('/tracker', api.removeTracker); // Remove a tracker
 
 module.exports = router;

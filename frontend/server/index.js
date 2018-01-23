@@ -18,6 +18,11 @@ const theApi = require('./api');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', theApi);
+app.all('/api/*', function(req, res, next) {
+  // CORS headers
+  res.header('Access-Control-Allow-Origin', '*'); // Restrict to specified domains
+  res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE');
+});
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {

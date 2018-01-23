@@ -72,7 +72,7 @@ function Button(props) {
       <style>
         {theme}
       </style>
-      <RaisedButton id={props.id} style={style.root} buttonStyle={style.button} overlayStyle={style.overlay}>
+      <RaisedButton id={props.id} onClick={props.onClick} style={style.root} buttonStyle={style.button} overlayStyle={style.overlay}>
         {Children.toArray(props.children)}
       </RaisedButton>
       {/* <RaisedButton style={style.root} buttonStyle={style.button} overlayStyle={style.overlay} rippleStyle={{height: '55px'}}>
@@ -85,6 +85,7 @@ function Button(props) {
 Button.propTypes = {
   inverted: PropTypes.bool,
   id: PropTypes.string,
+  onClick: PropTypes.func,
   children: PropTypes.node.isRequired,
 };
 

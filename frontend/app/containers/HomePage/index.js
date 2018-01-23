@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import axios from 'axios';
+import StackGrid from 'react-stack-grid';
 
 import P from 'components/P';
 import H2 from 'components/H2';
@@ -18,9 +19,10 @@ import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import Header from 'components/Header';
 import InstagramTile from 'components/InstagramTile';
+import TwitterTile from 'components/TwitterTile';
 import Button from 'components/Button';
 import TextField from 'material-ui/TextField';
-import CenteredSection from './CenteredSection';
+import Board from './Board';
 import Section from './Section';
 import Wrapper from './Wrapper';
 import reducer from './reducer';
@@ -32,10 +34,14 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   constructor(props) {
     super(props);
     this.state = {
-      insta: {},
-      tag: '',
+      insta: [],
+      twitter: [],
+      posts: [],
+      tag: 'ocean',
+      loading: true,
     };
-    this.getInsta = this.getInsta.bind(this);
+    this.getData = this.getData.bind(this);
+    this.shufflePosts = this.shufflePosts.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
   }
 
@@ -44,15 +50,45 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
    * when initial state username is not null, submit the form to load repos
    */
 
-  componentDidMount() {
-    this.getInsta();
+  async componentDidMount() {
+    await this.getData('ocean');
   }
 
-  getInsta() {
-    axios.post('http://172.19.1.14:3000/api/getTag', { tag: 'ocean' })
-    .then((res) => {
-      this.setState({ insta: res.data.data });
+  getData(hashtag) {
+    this.setState({ loading: true });
+    axios.post('http://172.19.1.14:3000/api/getInsta', { tag: hashtag })
+    .then((instaData) => {
+      this.setState({ insta: instaData.data.data });
+      axios.post('http://172.19.1.14:3000/api/getTwitter', { tag: hashtag })
+      .then((twitterData) => {
+        this.setState({ twitter: twitterData.data.data });
+        this.shufflePosts();
+        this.setState({ loading: false });
+      });
     });
+  }
+
+  // Instagram sucks and doesn't give us a real timestamp, just a 'time pulled', stamp that equates to the unix year 1970
+  // Merge the twitter and instagram data, shuffle with Fisher-Yates (Knuth) Shuffle algorithm
+  shufflePosts() {
+    const { insta, twitter } = this.state;
+    const data = [...insta, ...twitter];
+
+    // Initialize values to use in the shuffle
+    let i = data.length + 1;
+    let j;
+    let tempi;
+    let tempj;
+    // While we still have unshuffled items left in the array
+    while (i -= 1) { // eslint-disable-line
+      j = Math.floor(Math.random() * i); // Choose a random j value
+      // Swap values
+      tempi = data[i - 1];
+      tempj = data[j];
+      data[i - 1] = tempj;
+      data[j] = tempi;
+    }
+    this.setState({ posts: data });
   }
 
   handleTagChange(tag) {
@@ -60,15 +96,20 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   render() {
-    const { insta } = this.state;
+    const { posts, loading } = this.state;
 
-    let instaList;
-    if (insta.length > 0) {
-      instaList = insta.map((post, i) => { // eslint-disable-line
-        return <InstagramTile data={post} key={i.toString()} />;
+    let postList;
+    if (posts.length > 0) {
+      postList = posts.map((post, i) => {
+        if (post === null) return null;
+        if (post.post_type === 'instagram') {
+          return <InstagramTile data={post} key={i.toString()} />;
+        } else { // eslint-disable-line
+          return <TwitterTile data={post} key={i.toString()} />;
+        }
       });
     } else {
-      instaList = null;
+      postList = null;
     }
 
     return (
@@ -79,16 +120,14 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
           <meta name="description" content="A React.js Boilerplate application homepage" />
         </Helmet>
         <Wrapper>
-          <CenteredSection>
-            <H2>Instagram posts with #ocean:</H2>
-            <P>Refresh to reload</P>
-            {/* Enter a tag: <TextField hintText="Enter hashtag without # symbol" floatingLabelText="Hashtag" defaultValue={this.state.tag} onChange={this.handleTagChange} />
-            <Button onClick={this.getInsta(this.state.tag)}>Get Posts</Button> */}
-            {instaList}
-          </CenteredSection>
-          <Section>
-
+          <Section style={{ textAlign: 'center' }}>
+            <H2>Instagram & Twitter posts with #{this.state.tag}:</H2>
+            Enter a tag: <TextField hintText="Enter hashtag without # symbol" floatingLabelText="Hashtag" defaultValue={this.state.tag} onChange={this.handleTagChange} />
+            {loading ? <Button>...Loading</Button> : <Button onClick={() => { this.getData(this.state.tag) }}>Get Posts</Button>}
           </Section>
+          <StackGrid columnWidth={350} gutterWidth={10} gutterHeight={15} style={{ textAlign: 'center', marginBottom: '40px' }}>
+            {postList}
+          </StackGrid>
         </Wrapper>
       </article>
     );

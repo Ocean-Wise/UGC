@@ -1,8 +1,8 @@
 Arguments: 
-  /home/ethand/.nvm/versions/node/v9.0.0/bin/node /home/ethand/.nvm/versions/node/v9.0.0/bin/yarn
+  /home/ethand/.nvm/versions/node/v9.0.0/bin/node /home/ethand/.nvm/versions/node/v9.0.0/bin/yarn add react-stack-grid
 
 PATH: 
-  /home/ethand/.config/composer/vendor/bin:/home/ethand/.nvm/versions/node/v9.0.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+  /home/ethand/.config/composer/vendor/bin:/home/ethand/.nvm/versions/node/v9.0.0/bin:/bin:/usr/bin:/usr/X11R6/bin:/usr/local/bin
 
 Yarn version: 
   1.3.2
@@ -191,13 +191,14 @@ npm manifest:
         "express",
         "ip",
         "minimist",
-        "sanitize.css"
+        "sanitize.css",
         "massive",
         "pg",
         "bluebird",
         "pg-promise",
         "body-parser",
-        "python-shell"
+        "python-shell",
+        "instagram-node"
       ],
       "include": [
         "core-js",
@@ -234,6 +235,7 @@ npm manifest:
       "testRegex": "tests/.*\\.test\\.js$"
     },
     "dependencies": {
+      "axios": "^0.17.1",
       "babel-polyfill": "6.23.0",
       "body-parser": "^1.18.2",
       "chalk": "^1.1.3",
@@ -244,12 +246,14 @@ npm manifest:
       "history": "4.6.3",
       "hoist-non-react-statics": "2.1.1",
       "immutable": "3.8.1",
+      "instagram-node": "^0.5.8",
       "intl": "1.2.5",
       "invariant": "2.2.2",
       "ip": "1.1.5",
       "lodash": "4.17.4",
       "material-ui": "^0.20.0",
       "minimist": "1.2.0",
+      "moment": "^2.20.1",
       "pg-promise": "^7.3.3",
       "prop-types": "15.5.10",
       "python-shell": "^0.4.0",
@@ -609,6 +613,10 @@ Lockfile:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
   
+  async@0.2.x:
+    version "0.2.10"
+    resolved "https://registry.yarnpkg.com/async/-/async-0.2.10.tgz#b6bbe0b0674b9d719708ca38de8c237cb526c3d1"
+  
   async@^1.4.0:
     version "1.5.2"
     resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
@@ -641,6 +649,13 @@ Lockfile:
   aws4@^1.2.1:
     version "1.6.0"
     resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.6.0.tgz#83ef5ca860b2b32e4a0deedee8c771b9db57471e"
+  
+  axios@^0.17.1:
+    version "0.17.1"
+    resolved "https://registry.yarnpkg.com/axios/-/axios-0.17.1.tgz#2d8e3e5d0bdbd7327f91bc814f5c57660f81824d"
+    dependencies:
+      follow-redirects "^1.2.5"
+      is-buffer "^1.1.5"
   
   axobject-query@^0.1.0:
     version "0.1.0"
@@ -2092,6 +2107,10 @@ Lockfile:
       css-color-names "0.0.4"
       has "^1.0.1"
   
+  colors@0.6.0-1:
+    version "0.6.0-1"
+    resolved "https://registry.yarnpkg.com/colors/-/colors-0.6.0-1.tgz#6dbb68ceb8bc60f2b313dcc5ce1599f06d19e67a"
+  
   colors@^1.1.2, colors@~1.1.2:
     version "1.1.2"
     resolved "https://registry.yarnpkg.com/colors/-/colors-1.1.2.tgz#168a4701756b6a7f51a12ce0c97bfa28c084ed63"
@@ -2483,6 +2502,12 @@ Lockfile:
   debug@2.6.9:
     version "2.6.9"
     resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
+    dependencies:
+      ms "2.0.0"
+  
+  debug@^3.1.0:
+    version "3.1.0"
+    resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
     dependencies:
       ms "2.0.0"
   
@@ -3562,6 +3587,12 @@ Lockfile:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
   
+  follow-redirects@^1.2.5:
+    version "1.4.0"
+    resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.4.0.tgz#a146a3a5d402201c7a3e6128643f0e336d212b10"
+    dependencies:
+      debug "^3.1.0"
+  
   fontfaceobserver@2.0.9:
     version "2.0.9"
     resolved "https://registry.yarnpkg.com/fontfaceobserver/-/fontfaceobserver-2.0.9.tgz#fb61e1053bd28d38cd4750a05b30f5130b32e97a"
@@ -3659,6 +3690,13 @@ Lockfile:
       define-properties "^1.1.2"
       function-bind "^1.1.0"
       is-callable "^1.1.3"
+  
+  fwk@1.0.x:
+    version "1.0.11"
+    resolved "https://registry.yarnpkg.com/fwk/-/fwk-1.0.11.tgz#098c8f7172ec25134ec86a1473affa364d404347"
+    dependencies:
+      async "0.2.x"
+      should "0.6.x"
   
   gauge@~2.7.3:
     version "2.7.4"
@@ -4342,6 +4380,13 @@ Lockfile:
       string-width "^1.0.1"
       strip-ansi "^3.0.0"
       through "^2.3.6"
+  
+  instagram-node@^0.5.8:
+    version "0.5.8"
+    resolved "https://registry.yarnpkg.com/instagram-node/-/instagram-node-0.5.8.tgz#7317aa23f816654c0b003ace51d81a509af5ecbf"
+    dependencies:
+      colors "0.6.0-1"
+      fwk "1.0.x"
   
   interpret@^1.0.0:
     version "1.0.3"
@@ -5763,6 +5808,10 @@ Lockfile:
   mkpath@^0.1.0:
     version "0.1.0"
     resolved "https://registry.yarnpkg.com/mkpath/-/mkpath-0.1.0.tgz#7554a6f8d871834cc97b5462b122c4c124d6de91"
+  
+  moment@^2.20.1:
+    version "2.20.1"
+    resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
   
   ms@0.7.1:
     version "0.7.1"
@@ -7623,6 +7672,10 @@ Lockfile:
     version "0.1.1"
     resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
   
+  should@0.6.x:
+    version "0.6.3"
+    resolved "https://registry.yarnpkg.com/should/-/should-0.6.3.tgz#d4b55335c8908f3a6c47970b687f750372acdc73"
+  
   signal-exit@^3.0.0:
     version "3.0.2"
     resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
@@ -8750,10 +8803,7 @@ Lockfile:
       fd-slicer "~1.0.1"
 
 Trace: 
-  SyntaxError: /home/ethand/Documents/UGC/frontend/package.json: Unexpected string in JSON at position 5188
-      at JSON.parse (<anonymous>)
-      at /home/ethand/.nvm/versions/node/v9.0.0/lib/node_modules/yarn/lib/cli.js:770:59
-      at Generator.next (<anonymous>)
-      at step (/home/ethand/.nvm/versions/node/v9.0.0/lib/node_modules/yarn/lib/cli.js:92:30)
-      at /home/ethand/.nvm/versions/node/v9.0.0/lib/node_modules/yarn/lib/cli.js:103:13
-      at <anonymous>
+  Error: getaddrinfo EAI_AGAIN registry.yarnpkg.com:443
+      at Object._errnoException (util.js:1031:13)
+      at errnoException (dns.js:60:15)
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:97:26)
