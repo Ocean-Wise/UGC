@@ -6,7 +6,7 @@ const api = require('./queries');
 
 // router.get('/authorize', api.instaAuth);
 // router.get('/instaAuth', api.instaHandled);
-router.get('/getTag', api.getTag);
+router.post('/getTag', api.getTag);
 router.get('/twitter', api.getTwitter);
 
 module.exports = router;

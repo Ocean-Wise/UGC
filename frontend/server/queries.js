@@ -10,9 +10,9 @@ const moment = require('moment');
 
 // Gets a list of posts with the provided tag
 function handleGetTag(req, res) {
-  axios.get('https://www.instagram.com/explore/tags/' + req.tag + '/?__a=1') // eslint-disable-line
+  axios.get('https://www.instagram.com/explore/tags/' + req.body.tag + '/?__a=1') // eslint-disable-line
     .then((result) => {
-      const data = result.data.graphql.hashtag.edge_hashtag_to_top_posts.edges; // or edge_hashtag_to_media
+      const data = result.data.graphql.hashtag.edge_hashtag_to_media.edges; // or edge_hashtag_to_top_posts
       const insta = []; // Initialize the array to return
       for (let i = 0; i < data.length; i += 1) {
         let item = {}; // eslint-disable-line

@@ -14,6 +14,7 @@ import { createStructuredSelector } from 'reselect';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import ActionFavorite from 'material-ui/svg-icons/action/favorite';
 import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border';
+import axios from 'axios';
 
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
@@ -47,6 +48,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     };
     this.handleCheck = this.handleCheck.bind(this);
     this.radioChange = this.radioChange.bind(this);
+    this.getInsta = this.getInsta.bind(this);
   }
 
 
@@ -58,6 +60,14 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     if (this.props.username && this.props.username.trim().length > 0) {
       this.props.onSubmitForm();
     }
+    this.getInsta();
+  }
+
+  getInsta() {
+    axios.post('http://172.19.1.14:3000/api/getTag', { tag: 'cave' })
+    .then((res) => {
+      console.log(res);
+    });
   }
 
   // Handle checkbox checks. Update the items selected in the 'checked' state array
