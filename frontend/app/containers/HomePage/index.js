@@ -12,10 +12,14 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import axios from 'axios';
 
+import P from 'components/P';
+import H2 from 'components/H2';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import Header from 'components/Header';
 import InstagramTile from 'components/InstagramTile';
+import Button from 'components/Button';
+import TextField from 'material-ui/TextField';
 import CenteredSection from './CenteredSection';
 import Section from './Section';
 import Wrapper from './Wrapper';
@@ -29,8 +33,10 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     super(props);
     this.state = {
       insta: {},
+      tag: '',
     };
     this.getInsta = this.getInsta.bind(this);
+    this.handleTagChange = this.handleTagChange.bind(this);
   }
 
 
@@ -43,10 +49,14 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   getInsta() {
-    axios.post('http://172.19.1.14:3000/api/getTag', { tag: 'cave' })
+    axios.post('http://172.19.1.14:3000/api/getTag', { tag: 'ocean' })
     .then((res) => {
       this.setState({ insta: res.data.data });
     });
+  }
+
+  handleTagChange(tag) {
+    this.setState({ tag: tag.target.value });
   }
 
   render() {
@@ -70,6 +80,10 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         </Helmet>
         <Wrapper>
           <CenteredSection>
+            <H2>Instagram posts with #ocean:</H2>
+            <P>Refresh to reload</P>
+            {/* Enter a tag: <TextField hintText="Enter hashtag without # symbol" floatingLabelText="Hashtag" defaultValue={this.state.tag} onChange={this.handleTagChange} />
+            <Button onClick={this.getInsta(this.state.tag)}>Get Posts</Button> */}
             {instaList}
           </CenteredSection>
           <Section>
