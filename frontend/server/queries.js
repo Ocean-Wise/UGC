@@ -172,6 +172,7 @@ function handleApprovePost(req, res, next) {
       })
       .catch((err) => { // eslint-disable-line
         return next(err);
+        // res.status(500).send(req.body);
       });
   } catch (err) {
     res.status(500).send('Error approving post');
