@@ -13,6 +13,7 @@ import { Switch, Route } from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import HomePage from 'containers/HomePage/Loadable';
+import TrackerPage from 'containers/TrackerPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Footer from 'components/Footer';
 
@@ -24,8 +25,8 @@ const AppWrapper = styled.div`
   flex-direction: column;
 `;
 
-
 export default function App() {
+
   return (
     <MuiThemeProvider>
       <AppWrapper>
@@ -37,6 +38,7 @@ export default function App() {
         </Helmet>
         <Switch>
           <Route exact path="/" component={HomePage} />
+          <Route path="/:tracker" component={TrackerPage} />
           <Route path="" component={NotFoundPage} />
         </Switch>
         <Footer />

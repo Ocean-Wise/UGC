@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import Button from 'components/Button';
 import OceanWiseNav from 'components/OceanWiseNav';
+import axios from 'axios';
 
 import A from './A';
 import Img from './Img';
@@ -17,8 +18,18 @@ import MobiLogo from './logo-mobile.svg';
 class Header extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
     super(props);
-    this.state = { width: window.innerWidth, height: window.innerHeight, source: '' };
+    this.state = {
+      width: window.innerWidth,
+      height: window.innerHeight,
+      source: '',
+      trackers: [],
+    };
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this.getTrackedTags = this.getTrackedTags.bind(this);
+  }
+
+  componentWillMount() {
+    this.getTrackedTags();
   }
 
   componentDidMount() {
@@ -39,8 +50,29 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
     }
   }
 
+  getTrackedTags() {
+    axios.get('http://172.19.1.14:3000/api/getTrackedTags')
+      .then((res) => {
+        this.setState({ trackers: res.data.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   render() {
-    const { source } = this.state;
+    const { source, trackers } = this.state;
+
+    const trackerPages = trackers.map((tracker) => {
+      return (
+        <Link key={tracker.tablename} to={'/' + tracker.tablename}>
+          <Button id={tracker.tablename + '-button'}>
+            {tracker.tablename.charAt(0).toUpperCase() + tracker.tablename.slice(1)}
+          </Button>
+        </Link>
+      )
+    });
+
     return (
       <div>
         <OceanWiseNav />
@@ -56,11 +88,7 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
               <FormattedMessage {...messages.home} />
             </Button>
           </Link>
-          <A href="http://www.material-ui.com/#/components/app-bar/">
-            <Button id="invert-test" inverted>
-              Material UI
-            </Button>
-          </A>
+          {trackerPages}
         </NavBar>
       </div>
     );

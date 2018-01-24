@@ -10,6 +10,7 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import StackGrid from 'react-stack-grid';
 
@@ -27,7 +28,7 @@ import Wrapper from './Wrapper';
 import reducer from './reducer';
 import saga from './saga';
 
-export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class TrackerPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
   // Set up the state for the checkboxes
   constructor(props) {
@@ -36,12 +37,21 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       insta: [],
       twitter: [],
       posts: [],
-      tag: '',
-      loading: false,
+      tag: this.props.match.params.tracker,
+      loading: true,
     };
     this.getData = this.getData.bind(this);
     this.shufflePosts = this.shufflePosts.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
+  }
+
+
+  /**
+   * when initial state username is not null, submit the form to load repos
+   */
+
+  async componentDidMount() {
+    await this.getData(this.state.tag);
   }
 
   getData(hashtag) {
@@ -106,25 +116,26 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       <article>
         <Header />
         <Helmet>
-          <title>Home Page</title>
+          <title>Tracker Page</title>
           <meta name="description" content="A React.js Boilerplate application homepage" />
         </Helmet>
         <Wrapper>
           <Section style={{ textAlign: 'center' }}>
             <H2>Instagram & Twitter posts with #{this.state.tag}:</H2>
-            Enter a tag: <TextField hintText="Enter hashtag without # symbol" floatingLabelText="Hashtag" defaultValue={this.state.tag} onChange={this.handleTagChange} />
-            {loading ? <Button>Loading...</Button> : <Button onClick={() => { this.getData(this.state.tag) }}>Get Posts</Button>}
           </Section>
-          <StackGrid columnWidth={350} gutterWidth={10} gutterHeight={15} style={{ textAlign: 'center', marginBottom: '40px' }}>
-            {postList}
-          </StackGrid>
+          {loading ? <center><H2>Loading...</H2></center> :
+            <StackGrid columnWidth={350} gutterWidth={10} gutterHeight={15} style={{ textAlign: 'center', marginBottom: '40px' }}>
+              {postList}
+            </StackGrid>
+          }
         </Wrapper>
       </article>
     );
   }
 }
 
-HomePage.propTypes = {
+TrackerPage.propTypes = {
+  match: PropTypes.object.isRequired,
 };
 
 export function mapDispatchToProps(dispatch) {
@@ -138,11 +149,11 @@ const mapStateToProps = createStructuredSelector({
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withReducer = injectReducer({ key: 'home', reducer });
-const withSaga = injectSaga({ key: 'home', saga });
+const withReducer = injectReducer({ key: 'trackerpage', reducer });
+const withSaga = injectSaga({ key: 'trackerpage', saga });
 
 export default compose(
   withReducer,
   withSaga,
   withConnect,
-)(HomePage);
+)(TrackerPage);
