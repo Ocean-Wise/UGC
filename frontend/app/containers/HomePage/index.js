@@ -10,10 +10,12 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import axios from 'axios';
 import StackGrid from 'react-stack-grid';
 
+import H1 from 'components/H1';
 import H2 from 'components/H2';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
@@ -38,11 +40,27 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       posts: [],
       tag: '',
       loading: false,
+      trackers: [],
     };
+    this.getTrackedTags = this.getTrackedTags.bind(this);
     this.getData = this.getData.bind(this);
     this.shufflePosts = this.shufflePosts.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
     this.newTracker = this.newTracker.bind(this);
+  }
+
+  componentWillMount() {
+    this.getTrackedTags();
+  }
+
+  getTrackedTags() {
+    axios.get('http://172.19.1.14:3000/api/getTrackedTags')
+    .then((res) => {
+      this.setState({ trackers: res.data.data });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   getData(hashtag) {
@@ -98,7 +116,19 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   render() {
-    const { posts, loading } = this.state;
+    const { posts, loading, trackers } = this.state;
+
+    const trackerPages = trackers.map((tracker) => { // eslint-disable-line
+      const url = '/' + tracker.tablename; // eslint-disable-line
+      const id = tracker.tablename + '-button'; // eslint-disable-line
+      return (
+        <Link key={tracker.tablename} to={url}>
+          <Button id={id}>
+            {tracker.tablename.charAt(0).toUpperCase() + tracker.tablename.slice(1)}
+          </Button>
+        </Link>
+      );
+    });
 
     let postList;
     if (posts.length > 0) {
@@ -123,10 +153,12 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         </Helmet>
         <Wrapper>
           <Section style={{ textAlign: 'center' }}>
+            <H1>Currently tracked tags:</H1>
+            {trackerPages}
             <H2>Instagram & Twitter posts with #{this.state.tag}:</H2>
             Enter a tag: <TextField hintText="Enter hashtag without # symbol" floatingLabelText="Hashtag" defaultValue={this.state.tag} onChange={this.handleTagChange} /><br />
             <Button onClick={() => { this.newTracker(this.state.tag); }}>Add as new tracker</Button><br />
-            {loading ? <Button>Loading...</Button> : <Button onClick={() => { this.getData(this.state.tag); }}>Get Sample Posts</Button>}
+            {loading ? <Button>Loading...</Button> : <Button onClick={() => { this.getData(this.state.tag); }}>Get Sample Posts</Button>}<br />
           </Section>
           <StackGrid columnWidth={350} gutterWidth={10} gutterHeight={15} style={{ textAlign: 'center', marginBottom: '40px' }}>
             {postList}
