@@ -1,4 +1,3 @@
-
 const axios = require('axios');
 
 // Gets a list of posts with the provided tag
@@ -142,27 +141,27 @@ function handleGetTrackedTags(req, res, next) {
 
 function handleGetApproved(req, res, next) {
   try {
-    db.any("SELECT * FROM " + req.body.tag + ' ORDER BY ID DESC')
+    db.any('SELECT * FROM ' + req.body.tag + ' ORDER BY ID DESC') // eslint-disable-line
       .then((dbData) => {
         res.status(200)
           .json({
             status: 'success',
             data: dbData,
-            message: 'Retrieved all approved posts for #' + req.body.tag,
+            message: 'Retrieved all approved posts for #' + req.body.tag, // eslint-disable-line
           });
       })
-      .catch((err) => {
+      .catch((err) => { // eslint-disable-line
         return next(err);
       });
   } catch (err) {
-    res.status(500).send('Error getting approved posts for #' + req.body.tag);
+    res.status(500).send('Error getting approved posts for #' + req.body.tag); // eslint-disable-line
   }
 }
 
 function handleApprovePost(req, res, next) {
   try {
-    db.none('INSERT into ' + req.body.tag + ' (PostType, TextContent, ContentURL, Author)' +
-            'values(${PostType}, ${TextContent}, ${ContentURL}, ${Author})',
+    db.none('INSERT into ' + req.body.tag + ' (PostType, TextContent, ContentURL, Author)' + // eslint-disable-line
+            'values(${PostType}, ${TextContent}, ${ContentURL}, ${Author})', // eslint-disable-line
             req.body)
       .then(() => {
         res.status(200)
@@ -171,7 +170,7 @@ function handleApprovePost(req, res, next) {
             message: 'Post approved',
           });
       })
-      .catch((err) => {
+      .catch((err) => { // eslint-disable-line
         return next(err);
       });
   } catch (err) {
@@ -181,7 +180,7 @@ function handleApprovePost(req, res, next) {
 
 function handleRemovePost(req, res, next) {
   try {
-    db.none('DELETE FROM ' + req.body.tag + ' WHERE ID=${ID}',
+    db.none('DELETE FROM ' + req.body.tag + ' WHERE ID=${ID}', // eslint-disable-line
             req.body)
       .then(() => {
         res.status(200)
@@ -190,7 +189,7 @@ function handleRemovePost(req, res, next) {
             message: 'Post removed',
           });
       })
-      .catch((err) => {
+      .catch((err) => { // eslint-disable-line
         return next(err);
       });
   } catch (err) {
@@ -200,17 +199,15 @@ function handleRemovePost(req, res, next) {
 
 function handleNewTracker(req, res, next) {
   try {
-    /* eslint-disable */
-    db.none('CREATE TABLE ' + req.body.tag + '(ID SERIAL PRIMARY KEY, PostType VARCHAR, TextContent VARCHAR, ContentURL VARCHAR, Author VARCHAR)')
-    /* eslint-enable */
+    db.none('CREATE TABLE ' + req.body.tag + '(ID SERIAL PRIMARY KEY, PostType VARCHAR, TextContent VARCHAR, ContentURL VARCHAR, Author VARCHAR)') // eslint-disable-line
       .then(() => {
         res.status(200)
           .json({
             status: 'success',
-            message: 'Added new table to track #' + req.body.tag,
+            message: 'Added new table to track #' + req.body.tag, // eslint-disable-line
           });
       })
-      .catch((err) => {
+      .catch((err) => { // eslint-disable-line
         return next(err);
       });
   } catch (err) {
@@ -218,14 +215,14 @@ function handleNewTracker(req, res, next) {
   }
 }
 
-function handleRemoveTracker(req, res, next) {
+function handleRemoveTracker(req, res) {
   try {
-    db.none('DROP TABLE ' + req.body.tag)
+    db.none('DROP TABLE ' + req.body.tag) // eslint-disable-line
       .then(() => {
         res.status(200)
           .json({
             status: 'success',
-            message: 'Removed tracker for #' + req.body.tag,
+            message: 'Removed tracker for #' + req.body.tag, // eslint-disable-line
           });
       });
   } catch (err) {

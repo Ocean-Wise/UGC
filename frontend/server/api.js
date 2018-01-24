@@ -10,6 +10,6 @@ router.post('/approvedPosts', api.getApproved); // Get all approved posts with h
 router.post('/approve', api.approvePost); // Approve a post
 router.delete('/approve', api.removePost); // Un-approve a post
 router.post('/tracker', api.newTracker); // Track a new hashtag
-router.delete('/tracker', api.removeTracker); // Remove a tracker
+router.post('/removeTracker', api.removeTracker); // Remove a tracker
 
 module.exports = router;

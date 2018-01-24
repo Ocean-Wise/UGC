@@ -5,6 +5,7 @@
 */
 
 import React from 'react';
+import { withRouter } from 'react-router';
 import Paper from 'material-ui/Paper';
 import PropTypes from 'prop-types';
 import P from 'components/P';
@@ -24,6 +25,14 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
   render() {
     const { data } = this.props;
 
+    const approveButton = (
+      <div style={{ margin: '5px' }}>
+        <Button onClick={() => { this.approved(); }}>
+          Approve
+        </Button>
+      </div>
+    );
+
     let content;
     if (data.content_type === 'image') {
       content = <img src={data.content[0].src} alt="yup" style={{ width: '100%', height: '50%' }} />;
@@ -37,11 +46,7 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
 
     return (
       <Paper zDepth={3} style={{ width: '350px', height: '600px', overflowX: 'hidden' }}>
-        <div style={{ margin: '5px' }}>
-          <Button onClick={() => { this.approved() }}>
-            Approve
-          </Button>
-        </div>
+        {this.props.history.location.pathname === '/' ? null : approveButton}
         <center>
           {content}
           <P>
@@ -57,6 +62,7 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
 
 InstagramTile.propTypes = {
   data: PropTypes.object.isRequired,
+  history: PropTypes.object,
 };
 
-export default InstagramTile;
+export default withRouter(InstagramTile);

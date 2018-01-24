@@ -5,6 +5,7 @@
 */
 
 import React from 'react';
+import { withRouter } from 'react-router';
 import Paper from 'material-ui/Paper';
 import PropTypes from 'prop-types';
 import P from 'components/P';
@@ -24,13 +25,17 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
   render() {
     const { data } = this.props;
 
+    const approveButton = (
+      <div style={{ margin: '5px' }}>
+        <Button onClick={() => { this.approved(); }}>
+          Approve
+        </Button>
+      </div>
+    );
+
     return (
       <Paper zDepth={3} style={{ width: '350px', height: '250px', overflowX: 'hidden' }}>
-        <div style={{ margin: '5px' }}>
-          <Button onClick={() => { this.approved() }}>
-            Approve
-          </Button>
-        </div>
+        {this.props.history.location.pathname === '/' ? null : approveButton}
         <P>
           {data.user.username}
           <img src={data.user.profile_img} alt="profile" style={{ paddingLeft: '5px' }} />
@@ -45,6 +50,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
 
 TwitterTile.propTypes = {
   data: PropTypes.object.isRequired,
+  history: PropTypes.object,
 };
 
-export default TwitterTile;
+export default withRouter(TwitterTile);

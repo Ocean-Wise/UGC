@@ -7,14 +7,16 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import StackGrid from 'react-stack-grid';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
-import P from 'components/P';
 import H2 from 'components/H2';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
@@ -39,10 +41,16 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
       posts: [],
       tag: this.props.match.params.tracker,
       loading: true,
+      confirmDelete: false,
+      deleteValue: '',
+      open: false,
     };
     this.getData = this.getData.bind(this);
     this.shufflePosts = this.shufflePosts.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
+    this.doDelete = this.doDelete.bind(this);
+    this.handleModal = this.handleModal.bind(this);
+    this.handleDeleteField = this.handleDeleteField.bind(this);
   }
 
 
@@ -91,12 +99,44 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
     this.setState({ posts: data });
   }
 
+  // Check if delete has been confirmed, then call the delete endpoint for the current tag
+  doDelete() {
+    const { confirmDelete } = this.state;
+    if (confirmDelete) {
+      axios.post('http://172.19.1.14:3000/api/removeTracker', { tag: this.state.tag })
+        .then(() => { // eslint-disable-line
+          this.props.history.push('/');
+          return true;
+        })
+        .catch((err) => {
+          console.log(err);
+          return false;
+        });
+    } else {
+      return false;
+    }
+    return false;
+  }
+
   handleTagChange(tag) {
     this.setState({ tag: tag.target.value });
   }
 
+  handleModal() {
+    this.setState({ open: !this.state.open });
+  }
+
+  handleDeleteField(field) {
+    this.setState({ deleteValue: field.target.value });
+    if (this.state.deleteValue === 'delet') {
+      this.setState({ confirmDelete: true });
+    } else {
+      this.setState({ confirmDelete: false });
+    }
+  }
+
   render() {
-    const { posts, loading } = this.state;
+    const { posts, loading, confirmDelete } = this.state;
 
     let postList;
     if (posts.length > 0) {
@@ -112,6 +152,21 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
       postList = null;
     }
 
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary
+        onClick={() => { this.handleModal(); }}
+        keyboardFocused
+      />,
+      <FlatButton
+        label="Confirm"
+        primary
+        disabled={!confirmDelete}
+        onClick={() => { this.doDelete(); }}
+      />,
+    ];
+
     return (
       <article>
         <Header />
@@ -122,8 +177,20 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
         <Wrapper>
           <Section style={{ textAlign: 'center' }}>
             <H2>Instagram & Twitter posts with #{this.state.tag}:</H2>
+            <Button onClick={() => { this.handleModal(); }}>Delete this tracker?</Button>
+            <Dialog
+              title="Please confirm tracker deletion"
+              actions={actions}
+              modal={false}
+              open={this.state.open}
+              onRequestClose={() => { this.handleModal(); }}
+            >
+              Please type <em>delete</em> in the box to confirm deletion.<br />
+              <TextField hintText="Type 'delete'" floatingLabelText="Confirm deletion" defaultValue={this.state.deleteValue} onChange={this.handleDeleteField} />
+            </Dialog>
           </Section>
-          {loading ? <center><H2>Loading...</H2></center> :
+          {
+            loading ? <center><H2>Loading...</H2></center> :
             <StackGrid columnWidth={350} gutterWidth={10} gutterHeight={15} style={{ textAlign: 'center', marginBottom: '40px' }}>
               {postList}
             </StackGrid>
@@ -136,6 +203,7 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
 
 TrackerPage.propTypes = {
   match: PropTypes.object.isRequired,
+  history: PropTypes.object,
 };
 
 export function mapDispatchToProps(dispatch) {
@@ -156,4 +224,5 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
+  withRouter,
 )(TrackerPage);

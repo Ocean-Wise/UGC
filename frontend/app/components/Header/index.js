@@ -41,6 +41,16 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
     window.removeEventListener('resize', this.updateWindowDimensions);
   }
 
+  getTrackedTags() {
+    axios.get('http://172.19.1.14:3000/api/getTrackedTags')
+    .then((res) => {
+      this.setState({ trackers: res.data.data });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
   updateWindowDimensions() {
     this.setState({ width: window.innerWidth, height: window.innerHeight });
     if (this.state.width > 768) {
@@ -50,28 +60,22 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
     }
   }
 
-  getTrackedTags() {
-    axios.get('http://172.19.1.14:3000/api/getTrackedTags')
-      .then((res) => {
-        this.setState({ trackers: res.data.data });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
 
   render() {
     const { source, trackers } = this.state;
 
-    const trackerPages = trackers.map((tracker) => {
+    const trackerPages = trackers.map((tracker) => { // eslint-disable-line
+      const url = '/' + tracker.tablename; // eslint-disable-line
+      const id = tracker.tablename + '-button'; // eslint-disable-line
       return (
-        <Link key={tracker.tablename} to={'/' + tracker.tablename}>
-          <Button id={tracker.tablename + '-button'}>
+        <Link key={tracker.tablename} to={url}>
+          <Button id={id}>
             {tracker.tablename.charAt(0).toUpperCase() + tracker.tablename.slice(1)}
           </Button>
         </Link>
-      )
+      );
     });
+    // eslint-enable
 
     return (
       <div>

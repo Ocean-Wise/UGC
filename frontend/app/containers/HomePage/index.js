@@ -5,15 +5,15 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
+import { withRouter } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import axios from 'axios';
 import StackGrid from 'react-stack-grid';
 
-import P from 'components/P';
 import H2 from 'components/H2';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
@@ -42,6 +42,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     this.getData = this.getData.bind(this);
     this.shufflePosts = this.shufflePosts.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
+    this.newTracker = this.newTracker.bind(this);
   }
 
   getData(hashtag) {
@@ -56,6 +57,17 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         this.setState({ loading: false });
       });
     });
+  }
+
+  newTracker(hashtag) {
+    axios.post('http://172.19.1.14:3000/api/tracker', { tag: hashtag })
+      .then((res) => {
+        console.log(res);
+        this.props.history.push('/' + hashtag); // eslint-disable-line
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   // Instagram sucks and doesn't give us a real timestamp, just a 'time pulled', stamp that equates to the unix year 1970
@@ -112,8 +124,9 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         <Wrapper>
           <Section style={{ textAlign: 'center' }}>
             <H2>Instagram & Twitter posts with #{this.state.tag}:</H2>
-            Enter a tag: <TextField hintText="Enter hashtag without # symbol" floatingLabelText="Hashtag" defaultValue={this.state.tag} onChange={this.handleTagChange} />
-            {loading ? <Button>Loading...</Button> : <Button onClick={() => { this.getData(this.state.tag) }}>Get Posts</Button>}
+            Enter a tag: <TextField hintText="Enter hashtag without # symbol" floatingLabelText="Hashtag" defaultValue={this.state.tag} onChange={this.handleTagChange} /><br />
+            <Button onClick={() => { this.newTracker(this.state.tag); }}>Add as new tracker</Button><br />
+            {loading ? <Button>Loading...</Button> : <Button onClick={() => { this.getData(this.state.tag); }}>Get Sample Posts</Button>}
           </Section>
           <StackGrid columnWidth={350} gutterWidth={10} gutterHeight={15} style={{ textAlign: 'center', marginBottom: '40px' }}>
             {postList}
@@ -125,6 +138,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 }
 
 HomePage.propTypes = {
+  history: PropTypes.object,
 };
 
 export function mapDispatchToProps(dispatch) {
@@ -145,4 +159,5 @@ export default compose(
   withReducer,
   withSaga,
   withConnect,
+  withRouter,
 )(HomePage);
