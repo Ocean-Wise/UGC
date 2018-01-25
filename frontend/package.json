@@ -182,7 +182,8 @@
       "pg-promise",
       "body-parser",
       "python-shell",
-      "instagram-node"
+      "instagram-node",
+      "http-auth"
     ],
     "include": [
       "core-js",
@@ -229,6 +230,7 @@
     "fontfaceobserver": "2.0.9",
     "history": "4.6.3",
     "hoist-non-react-statics": "2.1.1",
+    "http-auth": "^3.2.3",
     "immutable": "3.8.1",
     "instagram-node": "^0.5.8",
     "intl": "1.2.5",

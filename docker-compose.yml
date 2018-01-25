@@ -1,5 +1,17 @@
 version: '2'
 services:
+  external_api:
+    build:
+      context: ./external_api
+    volumes:
+      - ./external_api:/external_api
+    ports:
+      - "5000:5000" # For development
+      #- "443:5000" # For production
+    depends_on:
+      - db
+    links:
+      - db
 
   frontend:
     build:

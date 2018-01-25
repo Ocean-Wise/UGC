@@ -1,5 +1,4 @@
 /* eslint consistent-return:0 */
-
 const express = require('express');
 const logger = require('./logger');
 
@@ -12,17 +11,25 @@ const resolve = require('path').resolve;
 const bodyParser = require('body-parser');
 const app = express();
 const theApi = require('./api');
+// Configuration for API basic authentication
+const auth = require('http-auth');
+const internal = auth.basic({
+  realm: "all",
+}, (username, password, callback) => {
+  callback(username === "foo" && password === "bar"); // Set the username and password here
+}
+);
 
-// If you need a backend, e.g. an API, add your custom backend-specific middleware here
-// app.use('/api', myApi);
+app.use(auth.connect(internal));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', theApi);
-app.all('/api/*', function(req, res, next) {
-  // CORS headers
-  res.header('Access-Control-Allow-Origin', '*'); // Restrict to specified domains
-  res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE');
-});
+// app.all('/api/*', function(req, res, next) {
+//   // CORS headers
+//   res.header('Access-Control-Allow-Origin', 'localhost'); // Restrict to specified domains
+//   res.header('Access-Control-Allow-Methods', 'GET,POST');
+//   next();
+// });
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {
