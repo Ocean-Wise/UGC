@@ -14,6 +14,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import HomePage from 'containers/HomePage/Loadable';
 import TrackerPage from 'containers/TrackerPage/Loadable';
+import ApprovedPage from 'containers/ApprovedPage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Footer from 'components/Footer';
 
@@ -38,7 +39,8 @@ export default function App() {
         </Helmet>
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/:tracker" component={TrackerPage} />
+          <Route path="/board/:tracker" component={TrackerPage} />
+          <Route path="/check/:tracker" component={ApprovedPage} />
           <Route path="" component={NotFoundPage} />
         </Switch>
         <Footer />

@@ -18,7 +18,7 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
     super(props);
     this.state = {
       approved: false,
-      hashtag: this.props.history.location.pathname.substring(1),
+      hashtag: this.props.history.location.pathname.substring(7),
       dbID: null,
     };
     this.approved = this.approved.bind(this);
@@ -39,12 +39,23 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
       content = data.content;
     }
 
+    let theText;
+    let theAuthor;
+    if (data.user === undefined) {
+      theText = data.textcontent;
+      content = data.contenturl;
+      theAuthor = data.author;
+    } else {
+      theText = data.text;
+      theAuthor = data.user.full_name;
+    }
+
     axios.post('http://172.19.1.14:3000/api/approve', {
       tag: this.state.hashtag,
       PostType: 'instagram',
-      TextContent: data.text,
+      TextContent: theText,
       ContentURL: content,
-      Author: data.user.full_name,
+      Author: theAuthor,
     })
       .then(() => {
         this.setState({ approved: true });
@@ -70,7 +81,7 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
     axios.post('http://172.19.1.14:3000/api/approvedPosts', { tag: this.state.hashtag })
       .then((res) => { // eslint-disable-line
         for (let i = 0; i < res.data.data.length; i += 1) {
-          if (res.data.data[i].textcontent === data.text) {
+          if (res.data.data[i].textcontent === data.text || res.data.data[i].textcontent === data.textcontent) {
             this.setState({ dbID: parseInt(res.data.data[i].id), approved: true }); // eslint-disable-line
             return true;
           }
@@ -117,19 +128,44 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
       );
     }
 
-    return (
-      <Paper zDepth={3} style={{ width: '350px', height: '600px', overflowX: 'hidden' }}>
-        {this.props.history.location.pathname === '/' ? null : approveButton}
-        <center>
-          {content}
-          <P>
-            <b>{data.user.full_name}</b>
-            <img src={data.user.profile_pic_url} alt="profile" style={{ paddingLeft: '5px', height: '50px', width: '50px' }} />
-          </P>
-          <P style={{ overflowX: 'hidden', padding: '0 20px' }}>{data.text}</P>
-        </center>
-      </Paper>
-    );
+    try {
+      return (
+        <Paper zDepth={3} style={{ width: '350px', height: '600px', overflowX: 'hidden' }}>
+          {this.props.history.location.pathname === '/' ? null : approveButton}
+          <center>
+            {content}
+            <P>
+              <b>{data.user.full_name}</b>
+              <img src={data.user.profile_pic_url} alt="profile" style={{ paddingLeft: '5px', height: '50px', width: '50px' }} />
+            </P>
+            <P style={{ overflowX: 'hidden', padding: '0 20px' }}>{data.text}</P>
+          </center>
+        </Paper>
+      );
+    } catch (err) {
+      if (data.contenturl !== null && data.contenturl.match(/.*\.jpg/g)) {
+        content = <img src={data.contenturl} alt="yup" style={{ width: '100%', height: '50%' }} />;
+      } else {
+        content = ( // eslint-disable-next-line
+          <video controls style={{ width: '100%' }}>
+            <source src={data.contenturl} type="video/mp4" />
+          </video>
+        );
+      }
+      return (
+        <Paper zDepth={3} style={{ width: '350px', height: '600px', overflowX: 'hidden' }}>
+          {this.props.history.location.pathname === '/' ? null : approveButton}
+          <center>
+            {content}
+            <P>
+              <b>{data.author}</b>
+              {/* <img src={data.user.profile_pic_url} alt="profile" style={{ paddingLeft: '5px', height: '50px', width: '50px' }} /> */}
+            </P>
+            <P style={{ overflowX: 'hidden', padding: '0 20px' }}>{data.textcontent}</P>
+          </center>
+        </Paper>
+      );
+    }
   }
 }
 

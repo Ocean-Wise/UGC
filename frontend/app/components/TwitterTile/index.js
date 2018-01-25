@@ -18,7 +18,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
     super(props);
     this.state = {
       approved: false,
-      hashtag: this.props.history.location.pathname.substring(1),
+      hashtag: this.props.history.location.pathname.substring(7),
       dbID: '',
     };
     this.approved = this.approved.bind(this);
@@ -33,12 +33,22 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
   approved() {
     const { data } = this.props;
 
+    let theText;
+    let theAuthor;
+    if (data.user === undefined) {
+      theText = data.textcontent;
+      theAuthor = data.author;
+    } else {
+      theText = data.text;
+      theAuthor = data.user.username;
+    }
+
     axios.post('http://172.19.1.14:3000/api/approve', {
       tag: this.state.hashtag,
       PostType: 'twitter',
-      TextContent: data.text,
+      TextContent: theText,
       ContentURL: null,
-      Author: data.user.username,
+      Author: theAuthor,
     })
       .then(() => {
         this.setState({ approved: true });
@@ -64,7 +74,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
     axios.post('http://172.19.1.14:3000/api/approvedPosts', { tag: this.state.hashtag })
       .then((res) => { // eslint-disable-line
         for (let i = 0; i < res.data.data.length; i += 1) {
-          if (res.data.data[i].textcontent === data.text) {
+          if (res.data.data[i].textcontent === data.text || res.data.data[i].textcontent === data.textcontent) {
             this.setState({ dbID: parseInt(res.data.data[i].id), approved: true }); // eslint-disable-line
             return true;
           }
@@ -100,19 +110,32 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
       );
     }
 
-
-    return (
-      <Paper zDepth={3} style={{ width: '350px', height: '250px', overflowX: 'hidden' }}>
-        {this.props.history.location.pathname === '/' ? null : approveButton}
-        <P>
-          {data.user.username}
-          <img src={data.user.profile_img} alt="profile" style={{ paddingLeft: '5px' }} />
-        </P>
-        <center>
-          <P style={{ overflowX: 'hidden', padding: '0 20px' }}>{data.text}</P>
-        </center>
-      </Paper>
-    );
+    try {
+      return (
+        <Paper zDepth={3} style={{ width: '350px', height: '250px', overflowX: 'hidden' }}>
+          {this.props.history.location.pathname === '/' ? null : approveButton}
+          <P>
+            {data.user.username}
+            <img src={data.user.profile_img} alt="profile" style={{ paddingLeft: '5px' }} />
+          </P>
+          <center>
+            <P style={{ overflowX: 'hidden', padding: '0 20px' }}>{data.text}</P>
+          </center>
+        </Paper>
+      );
+    } catch(err) {
+      return (
+        <Paper zDepth={3} style={{ width: '350px', height: '250px', overflowX: 'hidden' }}>
+          {this.props.history.location.pathname === '/' ? null : approveButton}
+          <P>
+            {data.author}
+          </P>
+          <center>
+            <P style={{ overflowX: 'hidden', padding: '0 20px' }}>{data.textcontent}</P>
+          </center>
+        </Paper>
+      );
+    }
   }
 }
 

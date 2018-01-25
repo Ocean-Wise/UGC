@@ -13,13 +13,7 @@ import Links from './Links';
 function Footer() {
   return (
     <Wrapper>
-      <Section>
-        <Links />
-      </Section>
-      <Section>
-        <LocaleToggle />
-      </Section>
-      <Section>
+      <Section style={{ margin: '0 auto' }}>
         <Logo src={OWLogo} alt="Ocean Wise" />
         <FormattedMessage
           {...messages.authorMessage}

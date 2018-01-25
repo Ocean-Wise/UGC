@@ -10,8 +10,8 @@ import { Helmet } from 'react-helmet';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom';
+import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import StackGrid from 'react-stack-grid';
@@ -31,7 +31,7 @@ import Wrapper from './Wrapper';
 import reducer from './reducer';
 import saga from './saga';
 
-export class TrackerPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class ApprovedPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
   // Set up the state for the checkboxes
   constructor(props) {
@@ -46,8 +46,7 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
       deleteValue: '',
       open: false,
     };
-    this.getData = this.getData.bind(this);
-    this.shufflePosts = this.shufflePosts.bind(this);
+    this.getApproved = this.getApproved.bind(this);
     this.handleTagChange = this.handleTagChange.bind(this);
     this.doDelete = this.doDelete.bind(this);
     this.handleModal = this.handleModal.bind(this);
@@ -60,44 +59,19 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
    */
 
   async componentDidMount() {
-    await this.getData(this.state.tag);
+    await this.getApproved(this.state.tag);
   }
 
-  getData(hashtag) {
-    this.setState({ loading: true });
-    axios.post('http://172.19.1.14:3000/api/getInsta', { tag: hashtag })
-    .then((instaData) => {
-      this.setState({ insta: instaData.data.data });
-      axios.post('http://172.19.1.14:3000/api/getTwitter', { tag: hashtag })
-      .then((twitterData) => {
-        this.setState({ twitter: twitterData.data.data });
-        this.shufflePosts();
-        this.setState({ loading: false });
+  getApproved(hashtag) {
+    const { data } = this.props;
+
+    axios.post('http://172.19.1.14:3000/api/approvedPosts', { tag: hashtag })
+      .then((res) => { // eslint-disable-line
+        this.setState({ posts: res.data.data, loading: false });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
-  }
-
-  // Instagram sucks and doesn't give us a real timestamp, just a 'time pulled', stamp that equates to the unix year 1970
-  // Merge the twitter and instagram data, shuffle with Fisher-Yates (Knuth) Shuffle algorithm
-  shufflePosts() {
-    const { insta, twitter } = this.state;
-    const data = [...insta, ...twitter];
-
-    // Initialize values to use in the shuffle
-    let i = data.length + 1;
-    let j;
-    let tempi;
-    let tempj;
-    // While we still have unshuffled items left in the array
-    while (i -= 1) { // eslint-disable-line
-      j = Math.floor(Math.random() * i); // Choose a random j value
-      // Swap values
-      tempi = data[i - 1];
-      tempj = data[j];
-      data[i - 1] = tempj;
-      data[j] = tempi;
-    }
-    this.setState({ posts: data });
   }
 
   // Check if delete has been confirmed, then call the delete endpoint for the current tag
@@ -143,7 +117,7 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
     if (posts.length > 0) {
       postList = posts.map((post, i) => {
         if (post === null) return null;
-        if (post.post_type === 'instagram') {
+        if (post.posttype === 'instagram') {
           return <InstagramTile data={post} key={i.toString()} />;
         } else { // eslint-disable-line
           return <TwitterTile data={post} key={i.toString()} />;
@@ -177,12 +151,12 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
         </Helmet>
         <Wrapper>
           <Section style={{ textAlign: 'center' }}>
-            <Link to={'/check/' + this.state.tag}>
+            <Link to={'/board/' + this.state.tag}>
               <Button id="return-button">
-                View approved #{this.state.tag} posts
+                Back to {this.state.tag} recents
               </Button>
             </Link>
-            <H2>Instagram & Twitter posts with #{this.state.tag}:</H2>
+            <H2>Approved Instagram & Twitter posts with #{this.state.tag}:</H2>
             <Button onClick={() => { this.handleModal(); }}>Delete this tracker?</Button>
             <Dialog
               title="Please confirm tracker deletion"
@@ -207,7 +181,7 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
   }
 }
 
-TrackerPage.propTypes = {
+ApprovedPage.propTypes = {
   match: PropTypes.object.isRequired,
   history: PropTypes.object,
 };
@@ -223,12 +197,12 @@ const mapStateToProps = createStructuredSelector({
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withReducer = injectReducer({ key: 'trackerpage', reducer });
-const withSaga = injectSaga({ key: 'trackerpage', saga });
+const withReducer = injectReducer({ key: 'ApprovedPage', reducer });
+const withSaga = injectSaga({ key: 'ApprovedPage', saga });
 
 export default compose(
   withReducer,
   withSaga,
   withConnect,
   withRouter,
-)(TrackerPage);
+)(ApprovedPage);

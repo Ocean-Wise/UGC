@@ -81,7 +81,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     axios.post('http://172.19.1.14:3000/api/tracker', { tag: hashtag })
       .then((res) => {
         console.log(res);
-        this.props.history.push('/' + hashtag); // eslint-disable-line
+        this.props.history.push('/board/' + hashtag); // eslint-disable-line
       })
       .catch((err) => {
         console.log(err);
@@ -119,7 +119,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     const { posts, loading, trackers } = this.state;
 
     const trackerPages = trackers.map((tracker) => { // eslint-disable-line
-      const url = '/' + tracker.tablename; // eslint-disable-line
+      const url = '/board/' + tracker.tablename; // eslint-disable-line
       const id = tracker.tablename + '-button'; // eslint-disable-line
       return (
         <Link key={tracker.tablename} to={url}>
