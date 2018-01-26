@@ -65,7 +65,7 @@ export class ApprovedPage extends React.PureComponent { // eslint-disable-line r
   getApproved(hashtag) {
     const { data } = this.props;
 
-    axios.post('http://172.19.1.14:3000/api/approvedPosts', { tag: hashtag })
+    axios.post('http://35.227.59.7/api/approvedPosts', { tag: hashtag })
       .then((res) => { // eslint-disable-line
         this.setState({ posts: res.data.data, loading: false });
       })
@@ -78,7 +78,7 @@ export class ApprovedPage extends React.PureComponent { // eslint-disable-line r
   doDelete() {
     const { confirmDelete } = this.state;
     if (confirmDelete) {
-      axios.post('http://172.19.1.14:3000/api/removeTracker', { tag: this.state.tag })
+      axios.post('http://35.227.59.7/api/removeTracker', { tag: this.state.tag })
         .then(() => { // eslint-disable-line
           this.props.history.push('/');
           return true;

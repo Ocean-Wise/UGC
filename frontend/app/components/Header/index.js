@@ -9,7 +9,6 @@ import axios from 'axios';
 import A from './A';
 import Img from './Img';
 import NavBar from './NavBar';
-import Banner from './banner.jpg';
 import Container from './Container';
 import Logo from './Logo';
 import messages from './messages';
@@ -55,7 +54,6 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
         <A href="https://ocean.org">
           <Container>
             <Logo src={source} alt="Logo" />
-            <Img src={Banner} alt="Ocean wise" />
           </Container>
         </A>
         <NavBar location={this.props.location}>
