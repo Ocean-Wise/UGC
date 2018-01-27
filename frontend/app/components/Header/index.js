@@ -11,6 +11,7 @@ import Img from './Img';
 import NavBar from './NavBar';
 import Container from './Container';
 import Logo from './Logo';
+import banner from './banner';
 import messages from './messages';
 import DeskLogo from './logo.svg';
 import MobiLogo from './logo-mobile.svg';
@@ -54,6 +55,7 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
         <A href="https://ocean.org">
           <Container>
             <Logo src={source} alt="Logo" />
+            <Img src={banner} alt="banner" />
           </Container>
         </A>
         <NavBar location={this.props.location}>
