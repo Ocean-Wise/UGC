@@ -59,6 +59,7 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
     })
       .then(() => {
         this.setState({ approved: true });
+        this.isApproved();
       })
       .catch((err) => {
         console.log(err);

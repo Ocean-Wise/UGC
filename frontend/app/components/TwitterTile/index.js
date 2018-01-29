@@ -123,7 +123,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
           </center>
         </Paper>
       );
-    } catch(err) {
+    } catch (err) {
       return (
         <Paper zDepth={3} style={{ width: '350px', height: '250px', overflowX: 'hidden' }}>
           {this.props.history.location.pathname === '/' ? null : approveButton}
