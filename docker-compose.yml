@@ -6,8 +6,8 @@ services:
     volumes:
       - ./external_api:/external_api
     ports:
-      - "5000:5000" # For development
-      #- "443:5000" # For production
+      #- "5000:5000" # For development
+      - "443:5000" # For production
     depends_on:
       - db
     links:
@@ -21,8 +21,8 @@ services:
     volumes:
       - ./frontend/:/frontend/
     ports:
-      - "3000:3000" # For development
-      #- "80:3000" # For production
+      #- "3000:3000" # For development
+      - "80:3000" # For production
     depends_on:
       - db
     links:

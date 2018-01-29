@@ -11,7 +11,7 @@ import Img from './Img';
 import NavBar from './NavBar';
 import Container from './Container';
 import Logo from './Logo';
-import banner from './banner';
+import banner from './banner.jpg';
 import messages from './messages';
 import DeskLogo from './logo.svg';
 import MobiLogo from './logo-mobile.svg';
