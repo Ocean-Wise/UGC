@@ -59,7 +59,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       this.setState({ trackers: res.data.data });
     })
     .catch((err) => {
-      console.log(err);
+      console.log(err); // eslint-disable-line
     });
   }
 
@@ -80,11 +80,11 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   newTracker(hashtag) {
     axios.post('http://35.227.59.7/api/tracker', { tag: hashtag })
       .then((res) => {
-        console.log(res);
+        console.log(res); // eslint-disable-line
         this.props.history.push('/board/' + hashtag); // eslint-disable-line
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err); // eslint-disable-line
       });
   }
 

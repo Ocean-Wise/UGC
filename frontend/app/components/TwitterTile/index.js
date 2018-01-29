@@ -55,7 +55,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
         this.isApproved();
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err); // eslint-disable-line
       });
   }
 
@@ -65,7 +65,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
         this.setState({ approved: false });
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err); // eslint-disable-line
       });
   }
 
@@ -81,7 +81,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err); // eslint-disable-line
         return false;
       });
     return false;

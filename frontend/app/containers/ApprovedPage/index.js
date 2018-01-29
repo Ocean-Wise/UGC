@@ -63,14 +63,12 @@ export class ApprovedPage extends React.PureComponent { // eslint-disable-line r
   }
 
   getApproved(hashtag) {
-    const { data } = this.props;
-
     axios.post('http://35.227.59.7/api/approvedPosts', { tag: hashtag })
       .then((res) => { // eslint-disable-line
         this.setState({ posts: res.data.data, loading: false });
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err); // eslint-disable-line
       });
   }
 
@@ -84,7 +82,7 @@ export class ApprovedPage extends React.PureComponent { // eslint-disable-line r
           return true;
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err); // eslint-disable-line
           return false;
         });
     } else {
@@ -142,6 +140,8 @@ export class ApprovedPage extends React.PureComponent { // eslint-disable-line r
       />,
     ];
 
+    const returnURL = '/board/' + this.state.tag; // eslint-disable-line
+
     return (
       <article>
         <Header />
@@ -151,7 +151,7 @@ export class ApprovedPage extends React.PureComponent { // eslint-disable-line r
         </Helmet>
         <Wrapper>
           <Section style={{ textAlign: 'center' }}>
-            <Link to={'/board/' + this.state.tag}>
+            <Link to={returnURL}>
               <Button id="return-button">
                 Back to {this.state.tag} recents
               </Button>

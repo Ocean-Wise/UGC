@@ -62,7 +62,7 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
         this.isApproved();
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err); // eslint-disable-line
       });
   }
 
@@ -72,7 +72,7 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
         this.setState({ approved: false });
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err); // eslint-disable-line
       });
   }
 
@@ -89,7 +89,7 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err); // eslint-disable-line
         return false;
       });
     return false;

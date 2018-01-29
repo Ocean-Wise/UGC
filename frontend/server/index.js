@@ -14,9 +14,9 @@ const theApi = require('./api');
 // Configuration for API basic authentication
 const auth = require('http-auth');
 const internal = auth.basic({
-  realm: "all",
+  realm: 'all',
 }, (username, password, callback) => {
-  callback(username === "foo" && password === "bar"); // Set the username and password here
+  callback(username === 'foo' && password === 'bar'); // Set the username and password here
 }
 );
 

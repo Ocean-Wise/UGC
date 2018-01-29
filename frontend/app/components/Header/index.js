@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import Button from 'components/Button';
 import OceanWiseNav from 'components/OceanWiseNav';
-import axios from 'axios';
 
 import A from './A';
 import Img from './Img';
@@ -12,7 +10,6 @@ import NavBar from './NavBar';
 import Container from './Container';
 import Logo from './Logo';
 import banner from './banner.jpg';
-import messages from './messages';
 import DeskLogo from './logo.svg';
 import MobiLogo from './logo-mobile.svg';
 
@@ -47,7 +44,7 @@ class Header extends React.Component { // eslint-disable-line react/prefer-state
 
 
   render() {
-    const { source, trackers } = this.state;
+    const { source } = this.state;
 
     return (
       <div>

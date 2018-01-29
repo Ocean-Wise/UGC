@@ -27,7 +27,6 @@ const AppWrapper = styled.div`
 `;
 
 export default function App() {
-
   return (
     <MuiThemeProvider>
       <AppWrapper>

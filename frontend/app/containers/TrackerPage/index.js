@@ -110,7 +110,7 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
           return true;
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err); // eslint-disable-line
           return false;
         });
     } else {
@@ -168,6 +168,8 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
       />,
     ];
 
+    const approvedURL = '/check/' + this.state.tag; // eslint-disable-line
+
     return (
       <article>
         <Header />
@@ -177,7 +179,7 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
         </Helmet>
         <Wrapper>
           <Section style={{ textAlign: 'center' }}>
-            <Link to={'/check/' + this.state.tag}>
+            <Link to={approvedURL}>
               <Button id="return-button">
                 View approved #{this.state.tag} posts
               </Button>
