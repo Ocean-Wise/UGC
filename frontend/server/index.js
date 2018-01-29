@@ -16,7 +16,7 @@ const auth = require('http-auth');
 const internal = auth.basic({
   realm: 'all',
 }, (username, password, callback) => {
-  callback(username === 'foo' && password === 'bar'); // Set the username and password here
+  callback(username === 'admin' && password === 'frostypenguinscandance'); // Set the username and password here
 }
 );
 
