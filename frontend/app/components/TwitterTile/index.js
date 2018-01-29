@@ -52,6 +52,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
     })
       .then(() => {
         this.setState({ approved: true });
+        this.isApproved();
       })
       .catch((err) => {
         console.log(err);
@@ -70,7 +71,6 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
 
   isApproved() {
     const { data } = this.props;
-
     axios.post('http://35.227.59.7/api/approvedPosts', { tag: this.state.hashtag })
       .then((res) => { // eslint-disable-line
         for (let i = 0; i < res.data.data.length; i += 1) {
