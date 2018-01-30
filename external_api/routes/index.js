@@ -9,5 +9,6 @@ var api = require('../queries');
 // });
 
 router.post('/getApproved', api.getApproved);
+router.get('/embeddable', api.getEmbed);
 
 module.exports = router;

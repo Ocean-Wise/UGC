@@ -30,6 +30,7 @@ const cn = {
 
 var pgp = require('pg-promise')(options);
 var db = pgp(cn);
+const path = require('path');
 
 function handleGetApproved(req, res, next) {
   try {
@@ -50,6 +51,17 @@ function handleGetApproved(req, res, next) {
   }
 }
 
+function handleGetEmbed(req, res, next) {
+  res.sendFile(path.join(__dirname, 'public', 'oceanWiseUGC.min.js'), function (err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log('Sent embeddable');
+    }
+  });
+}
+
 module.exports = {
   getApproved: handleGetApproved,
+  getEmbed: handleGetEmbed,
 };
