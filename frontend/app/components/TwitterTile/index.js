@@ -53,6 +53,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
       ContentURL: null,
       Author: theAuthor,
       Profile: profilePic,
+      Username: theAuthor,
     })
       .then(() => {
         this.setState({ approved: true });

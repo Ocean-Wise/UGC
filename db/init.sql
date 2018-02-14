@@ -9,8 +9,9 @@ CREATE TABLE ocean (
   TextContent VARCHAR,
   ContentURL VARCHAR,
   Author VARCHAR,
-  Profile VARCHAR
+  Profile VARCHAR,
+  Username VARCHAR
 );
 
-INSERT INTO ocean (PostType, TextContent, ContentURL, Author, Profile)
-  VALUES('twitter', 'This is a post on #twitter', 'https://twitter.com/', '@ethan_dinnen', 'https://some.url/');
+INSERT INTO ocean (PostType, TextContent, ContentURL, Author, Profile, Username)
+  VALUES('twitter', 'This is a post on #twitter', 'https://twitter.com/', '@ethan_dinnen', 'https://some.url/', 'someuser');

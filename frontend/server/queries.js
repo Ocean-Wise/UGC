@@ -160,8 +160,8 @@ function handleGetApproved(req, res, next) {
 
 function handleApprovePost(req, res, next) {
   try {
-    db.none('INSERT into ' + req.body.tag + ' (PostType, TextContent, ContentURL, Author, Profile)' + // eslint-disable-line
-            'values(${PostType}, ${TextContent}, ${ContentURL}, ${Author}, ${Profile})', // eslint-disable-line
+    db.none('INSERT into ' + req.body.tag + ' (PostType, TextContent, ContentURL, Author, Profile, Username)' + // eslint-disable-line
+            'values(${PostType}, ${TextContent}, ${ContentURL}, ${Author}, ${Profile}, ${Username})', // eslint-disable-line
             req.body)
       .then(() => {
         res.status(200)
@@ -200,7 +200,7 @@ function handleRemovePost(req, res, next) {
 
 function handleNewTracker(req, res, next) {
   try {
-    db.none('CREATE TABLE ' + req.body.tag + '(ID SERIAL PRIMARY KEY, PostType VARCHAR, TextContent VARCHAR, ContentURL VARCHAR, Author VARCHAR, Profile VARCHAR)') // eslint-disable-line
+    db.none('CREATE TABLE ' + req.body.tag + '(ID SERIAL PRIMARY KEY, PostType VARCHAR, TextContent VARCHAR, ContentURL VARCHAR, Author VARCHAR, Profile VARCHAR, Username VARCHAR)') // eslint-disable-line
       .then(() => {
         res.status(200)
           .json({
