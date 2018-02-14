@@ -160,8 +160,8 @@ function handleGetApproved(req, res, next) {
 
 function handleApprovePost(req, res, next) {
   try {
-    db.none('INSERT into ' + req.body.tag + ' (PostType, TextContent, ContentURL, Author)' + // eslint-disable-line
-            'values(${PostType}, ${TextContent}, ${ContentURL}, ${Author})', // eslint-disable-line
+    db.none('INSERT into ' + req.body.tag + ' (PostType, TextContent, ContentURL, Author, Profile)' + // eslint-disable-line
+            'values(${PostType}, ${TextContent}, ${ContentURL}, ${Author}, ${Profile})', // eslint-disable-line
             req.body)
       .then(() => {
         res.status(200)
