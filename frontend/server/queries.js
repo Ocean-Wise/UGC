@@ -200,7 +200,7 @@ function handleRemovePost(req, res, next) {
 
 function handleNewTracker(req, res, next) {
   try {
-    db.none('CREATE TABLE ' + req.body.tag + '(ID SERIAL PRIMARY KEY, PostType VARCHAR, TextContent VARCHAR, ContentURL VARCHAR, Author VARCHAR)') // eslint-disable-line
+    db.none('CREATE TABLE ' + req.body.tag + '(ID SERIAL PRIMARY KEY, PostType VARCHAR, TextContent VARCHAR, ContentURL VARCHAR, Author VARCHAR, Profile VARCHAR)') // eslint-disable-line
       .then(() => {
         res.status(200)
           .json({
