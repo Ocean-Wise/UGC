@@ -35,12 +35,15 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
 
     let theText;
     let theAuthor;
+    let profilePic;
     if (data.user === undefined) {
       theText = data.textcontent;
       theAuthor = data.author;
+      profilePic = '';
     } else {
       theText = data.text;
       theAuthor = data.user.username;
+      profilePic = data.user.profile_img;
     }
 
     axios.post('http://35.227.59.7/api/approve', {
@@ -49,6 +52,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
       TextContent: theText,
       ContentURL: null,
       Author: theAuthor,
+      Profile: profilePic,
     })
       .then(() => {
         this.setState({ approved: true });

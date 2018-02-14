@@ -41,13 +41,16 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
 
     let theText;
     let theAuthor;
+    let profilePic;
     if (data.user === undefined) {
       theText = data.textcontent;
       content = data.contenturl;
       theAuthor = data.author;
+      profilePic = '';
     } else {
       theText = data.text;
       theAuthor = data.user.full_name;
+      profilePic = data.user.profile_pic_url;
     }
 
     axios.post('http://35.227.59.7/api/approve', {
@@ -56,6 +59,7 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
       TextContent: theText,
       ContentURL: content,
       Author: theAuthor,
+      Profile: profilePic,
     })
       .then(() => {
         this.setState({ approved: true });
