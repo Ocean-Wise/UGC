@@ -5,6 +5,7 @@ CREATE DATABASE ugc;
 
 CREATE TABLE ocean (
   ID SERIAL PRIMARY KEY,
+  Shortcode VARCHAR,
   PostType VARCHAR,
   TextContent VARCHAR,
   ContentURL VARCHAR,
@@ -13,5 +14,5 @@ CREATE TABLE ocean (
   Username VARCHAR
 );
 
-INSERT INTO ocean (PostType, TextContent, ContentURL, Author, Profile, Username)
-  VALUES('twitter', 'This is a post on #twitter', 'https://twitter.com/', '@ethan_dinnen', 'https://some.url/', 'someuser');
+INSERT INTO ocean (Shortcode, PostType, TextContent, ContentURL, Author, Profile, Username)
+  VALUES('1234', 'twitter', 'This is a post on #twitter', 'https://twitter.com/', '@ethan_dinnen', 'https://some.url/', 'someuser');

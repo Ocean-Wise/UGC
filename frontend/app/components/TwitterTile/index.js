@@ -48,6 +48,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
 
     axios.post('http://35.227.59.7/api/approve', {
       tag: this.state.hashtag,
+      Shortcode: data.shortcode,
       PostType: 'twitter',
       TextContent: theText,
       ContentURL: null,

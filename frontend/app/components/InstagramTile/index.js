@@ -58,6 +58,7 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
 
     axios.post('http://35.227.59.7/api/approve', {
       tag: this.state.hashtag,
+      Shortcode: data.shortcode,
       PostType: 'instagram',
       TextContent: theText,
       ContentURL: content,

@@ -53,6 +53,7 @@ async function handleGetPost(item) {
         out.content_type = 'image';
         out.content = postInfo.display_resources;
       }
+      out.shortcode = item.id;
       return out; // Return output and set to updatedItem
     })
     .catch(() => { // eslint-disable-line
@@ -87,6 +88,7 @@ function handleGetTwitter(req, res) {
         user.profile_img = data[0].statuses[i].user.profile_image_url;
         post.user = user;
         post.text = data[0].statuses[i].text;
+        post.shortcode = data[0].statuses[i].id_str;
         out.push(post);
       }
       res.status(200)
@@ -160,8 +162,8 @@ function handleGetApproved(req, res, next) {
 
 function handleApprovePost(req, res, next) {
   try {
-    db.none('INSERT into ' + req.body.tag + ' (PostType, TextContent, ContentURL, Author, Profile, Username)' + // eslint-disable-line
-            'values(${PostType}, ${TextContent}, ${ContentURL}, ${Author}, ${Profile}, ${Username})', // eslint-disable-line
+    db.none('INSERT into ' + req.body.tag + ' (Shortcode, PostType, TextContent, ContentURL, Author, Profile, Username)' + // eslint-disable-line
+            'values(${Shortcode},${PostType}, ${TextContent}, ${ContentURL}, ${Author}, ${Profile}, ${Username})', // eslint-disable-line
             req.body)
       .then(() => {
         res.status(200)
@@ -200,7 +202,7 @@ function handleRemovePost(req, res, next) {
 
 function handleNewTracker(req, res, next) {
   try {
-    db.none('CREATE TABLE ' + req.body.tag + '(ID SERIAL PRIMARY KEY, PostType VARCHAR, TextContent VARCHAR, ContentURL VARCHAR, Author VARCHAR, Profile VARCHAR, Username VARCHAR)') // eslint-disable-line
+    db.none('CREATE TABLE ' + req.body.tag + '(ID SERIAL PRIMARY KEY, Shortcode VARCHAR, PostType VARCHAR, TextContent VARCHAR, ContentURL VARCHAR, Author VARCHAR, Profile VARCHAR, Username VARCHAR)') // eslint-disable-line
       .then(() => {
         res.status(200)
           .json({
