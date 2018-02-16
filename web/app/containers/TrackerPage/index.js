@@ -65,10 +65,10 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
 
   getData(hashtag) {
     this.setState({ loading: true });
-    axios.post('http://35.227.59.7/api/getInsta', { tag: hashtag })
+    axios.post('https://ugc-admin-board.herokuapp.com/api/getInsta', { tag: hashtag })
     .then((instaData) => {
       this.setState({ insta: instaData.data.data });
-      axios.post('http://35.227.59.7/api/getTwitter', { tag: hashtag })
+      axios.post('https://ugc-admin-board.herokuapp.com/api/getTwitter', { tag: hashtag })
       .then((twitterData) => {
         this.setState({ twitter: twitterData.data.data });
         this.shufflePosts();
@@ -104,7 +104,7 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
   doDelete() {
     const { confirmDelete } = this.state;
     if (confirmDelete) {
-      axios.post('http://35.227.59.7/api/removeTracker', { tag: this.state.tag })
+      axios.post('https://ugc-admin-board.herokuapp.com/api/removeTracker', { tag: this.state.tag })
         .then(() => { // eslint-disable-line
           this.props.history.push('/');
           return true;

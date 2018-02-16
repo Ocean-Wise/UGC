@@ -11,8 +11,8 @@ RUN apt-get update
 RUN apt-get install -y python-pip
 RUN pip install oauth2
 
-RUN mkdir -p /frontend
-WORKDIR /frontend
+RUN mkdir -p /web
+WORKDIR /web
 COPY ./ ./
 
 RUN yarn

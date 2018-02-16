@@ -54,7 +54,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   getTrackedTags() {
-    axios.get('http://35.227.59.7/api/getTrackedTags')
+    axios.get('https://ugc-admin-board.herokuapp.com/api/getTrackedTags')
     .then((res) => {
       this.setState({ trackers: res.data.data });
     })
@@ -65,10 +65,10 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
   getData(hashtag) {
     this.setState({ loading: true });
-    axios.post('http://35.227.59.7/api/getInsta', { tag: hashtag })
+    axios.post('https://ugc-admin-board.herokuapp.com/api/getInsta', { tag: hashtag })
     .then((instaData) => {
       this.setState({ insta: instaData.data.data });
-      axios.post('http://35.227.59.7/api/getTwitter', { tag: hashtag })
+      axios.post('https://ugc-admin-board.herokuapp.com/api/getTwitter', { tag: hashtag })
       .then((twitterData) => {
         this.setState({ twitter: twitterData.data.data });
         this.shufflePosts();
@@ -78,7 +78,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   newTracker(hashtag) {
-    axios.post('http://35.227.59.7/api/tracker', { tag: hashtag })
+    axios.post('https://ugc-admin-board.herokuapp.com/api/tracker', { tag: hashtag })
       .then((res) => {
         console.log(res); // eslint-disable-line
         this.props.history.push('/board/' + hashtag); // eslint-disable-line

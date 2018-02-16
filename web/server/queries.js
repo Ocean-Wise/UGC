@@ -110,16 +110,16 @@ const options = {
   promiseLib: promise,
 };
 
-const cn = {
-  host: 'db', // Container name from docker-compose.pml
-  port: 5432,
-  database: 'ugc',
-  user: 'root',
-  password: 'd8h*_z6a#SJ=cFfw',
-};
+// const cn = {
+//   host: 'db', // Container name from docker-compose.pml
+//   port: 5432,
+//   database: 'ugc',
+//   user: 'root',
+//   password: 'd8h*_z6a#SJ=cFfw',
+// };
 
 const pgp = require('pg-promise')(options);
-const db = pgp(cn);
+const db = pgp(`${process.env.DATABASE_URL}?ssl=true`);
 
 // Gets the three most recent pledges
 function handleGetTrackedTags(req, res, next) {
@@ -233,6 +233,27 @@ function handleRemoveTracker(req, res) {
   }
 }
 
+// Public functions
+function handleGetApprovedPublic(req, res, next) {
+  try {
+    console.log(req);
+    db.any('SELECT * FROM ' + req.body.tag + ' ORDER BY ID DESC') // eslint-disable-line
+      .then((dbData) => {
+        res.status(200)
+          .json({
+            status: 'success',
+            data: dbData,
+            message: 'Retrieved all approved posts for #' + req.body.tag, // eslint-disable-line
+          });
+      })
+      .catch((err) => { // eslint-disable-line
+        return next(err);
+      });
+  } catch (err) {
+    res.status(500).send('Error getting approved posts for #' + req.body.tag); // eslint-disable-line
+  }
+}
+
 module.exports = {
   getTag: handleGetTag,
   getTwitter: handleGetTwitter,
@@ -242,4 +263,5 @@ module.exports = {
   removePost: handleRemovePost,
   newTracker: handleNewTracker,
   removeTracker: handleRemoveTracker,
+  getApprovedPosts: handleGetApprovedPublic,
 };

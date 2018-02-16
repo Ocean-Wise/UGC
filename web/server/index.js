@@ -9,8 +9,10 @@ const isDev = process.env.NODE_ENV !== 'production';
 const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false;
 const resolve = require('path').resolve;
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
 const theApi = require('./api');
+const externalApi = require('./external');
 // Configuration for API basic authentication
 const auth = require('http-auth');
 const internal = auth.basic({
@@ -20,16 +22,24 @@ const internal = auth.basic({
 }
 );
 
-app.use(auth.connect(internal));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+app.use('/external', externalApi);
+app.all('/external/*', (req, res, next) => {
+  // CORS headers
+  res.header('Access-Control-Allow-Origin', '*'); // Restrict to specified domains
+  res.header('Access-Control-Allow-Methods', 'GET,POST');
+  next();
+});
+app.use(auth.connect(internal));
 app.use('/api', theApi);
-// app.all('/api/*', function(req, res, next) {
-//   // CORS headers
-//   res.header('Access-Control-Allow-Origin', 'localhost'); // Restrict to specified domains
-//   res.header('Access-Control-Allow-Methods', 'GET,POST');
-//   next();
-// });
+app.all('/api/*', (req, res, next) => {
+  // CORS headers
+  res.header('Access-Control-Allow-Origin', '*'); // Restrict to specified domains
+  res.header('Access-Control-Allow-Methods', 'GET,POST');
+  next();
+});
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {

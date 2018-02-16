@@ -46,7 +46,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
       profilePic = data.user.profile_img;
     }
 
-    axios.post('http://35.227.59.7/api/approve', {
+    axios.post('https://ugc-admin-board.herokuapp.com/api/approve', {
       tag: this.state.hashtag,
       Shortcode: data.shortcode,
       PostType: 'twitter',
@@ -66,7 +66,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
   }
 
   disapprove() {
-    axios.post('http://35.227.59.7/api/disapprove', { tag: this.state.hashtag, ID: this.state.dbID })
+    axios.post('https://ugc-admin-board.herokuapp.com/api/disapprove', { tag: this.state.hashtag, ID: this.state.dbID })
       .then(() => {
         this.setState({ approved: false });
       })
@@ -77,7 +77,7 @@ class TwitterTile extends React.Component { // eslint-disable-line react/prefer-
 
   isApproved() {
     const { data } = this.props;
-    axios.post('http://35.227.59.7/api/approvedPosts', { tag: this.state.hashtag })
+    axios.post('https://ugc-admin-board.herokuapp.com/api/approvedPosts', { tag: this.state.hashtag })
       .then((res) => { // eslint-disable-line
         for (let i = 0; i < res.data.data.length; i += 1) {
           if (res.data.data[i].textcontent === data.text || res.data.data[i].textcontent === data.textcontent) {

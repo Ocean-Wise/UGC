@@ -1,42 +1,11 @@
 version: '2'
 services:
-  external_api:
+  web:
     build:
-      context: ./external_api
-    volumes:
-      - ./external_api:/external_api
-    ports:
-      #- "5000:5000" # For development
-      - "443:5000" # For production
-    depends_on:
-      - db
-    links:
-      - db
-
-  frontend:
-    build:
-      context: ./frontend
+      context: ./web
       args:
         app_env: ${APP_ENV}
     volumes:
-      - ./frontend/:/frontend/
+      - ./web/:/web/
     ports:
-      #- "3000:3000" # For development
-      - "80:3000" # For production
-    depends_on:
-      - db
-    links:
-      - db
-
-  db:
-    build:
-      context: ./db
-    volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./db/pgdata:/pgdata
-    ports:
-      - "5432"
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=d8h*_z6a#SJ=cFfw
-      - PGDATA=/pgdata
+      - "3000:3000"
