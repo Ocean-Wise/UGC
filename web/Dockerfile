@@ -5,7 +5,7 @@ FROM node
 # $ docker build ./frontend --build-args app_env=production
 ENV NPM_CONFIG_LOGLEVEL warn
 ARG app_env
-ENV NODE_ENV $app_env
+ENV NODE_ENV=production
 
 RUN apt-get update
 RUN apt-get install -y python-pip
@@ -32,7 +32,6 @@ RUN yarn
 
 CMD if [ ${NODE_ENV} = production ]; \
 	then \
-	yarn run build && \
 	yarn run start:production; \
 	else \
 	yarn start; \

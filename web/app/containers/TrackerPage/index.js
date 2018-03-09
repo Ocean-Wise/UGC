@@ -19,6 +19,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 import H2 from 'components/H2';
+import H3 from 'components/H3';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
 import Header from 'components/Header';
@@ -45,6 +46,8 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
       confirmDelete: false,
       deleteValue: '',
       open: false,
+      manual: '',
+      manualPost: '',
     };
     this.getData = this.getData.bind(this);
     this.shufflePosts = this.shufflePosts.bind(this);
@@ -52,6 +55,8 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
     this.doDelete = this.doDelete.bind(this);
     this.handleModal = this.handleModal.bind(this);
     this.handleDeleteField = this.handleDeleteField.bind(this);
+    this.handleManual = this.handleManual.bind(this);
+    this.manualAddition = this.manualAddition.bind(this);
   }
 
 
@@ -136,8 +141,46 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
     }
   }
 
+  handleManual(field) {
+    this.setState({ manual: field.target.value });
+  }
+
+  manualAddition() {
+    //  https://www.instagram.com/p/BgGZhT2lt-w/
+    const { manual } = this.state;
+    if (manual.match(/twitter/g)) {
+      const pattern = /\/status\/(.*[^\/])$/g;
+      const res = pattern.exec(manual);
+      const theData = {
+        shortcode: res[1],
+        post_type: 'twitter',
+        contenturl: '',
+        textcontent: `This is a valid Twitter post with the url: ${manual}, if you would like to approve it click the button above.`,
+        author: '',
+        username: '',
+        profilePic: '',
+      };
+      this.setState({ manualPost: <center><TwitterTile data={theData} /></center> });
+    } else if (manual.match(/instagram/g)) {
+      const pattern = /\/p\/(.*[^\/])/g;
+      const res = pattern.exec(manual);
+      const theData = {
+        shortcode: res[1],
+        post_type: 'instagram',
+        contenturl: '',
+        textcontent: `This is a valid Instagram post with the url: ${manual}, if you would like to approve it click the button above.`,
+        author: '',
+        username: '',
+        profilePic: '',
+      };
+      this.setState({ manualPost: <center><InstagramTile data={theData} /></center> });
+    } else {
+      this.setState({ manualPost: <center><p style={{ color: 'red' }}>Invalid URL</p></center> });
+    }
+  }
+
   render() {
-    const { posts, loading, confirmDelete } = this.state;
+    const { posts, loading, confirmDelete, manualPost } = this.state;
 
     let postList;
     if (posts.length > 0) {
@@ -184,6 +227,11 @@ export class TrackerPage extends React.PureComponent { // eslint-disable-line re
                 View approved #{this.state.tag} posts
               </Button>
             </Link>
+            <H3>Add a post by its URL:</H3>
+            <p>This is <i>discouraged</i>, but useful if you cannot find a specific post you require</p>
+            <TextField style={{ width: 390 }} hintText="e.g., https://www.instagram.com/p/BgGZhT2lt-w/" defaultValue={this.state.manual} onChange={this.handleManual} />
+            <Button onClick={() => { this.manualAddition(); }}>Check URL</Button>
+            {manualPost}
             <H2>Instagram & Twitter posts with #{this.state.tag}:</H2>
             <Button onClick={() => { this.handleModal(); }}>Delete this tracker?</Button>
             <Dialog
