@@ -107,7 +107,6 @@ class InstagramTile extends React.Component { // eslint-disable-line react/prefe
   render() {
     const { data } = this.props;
     const { approved } = this.state;
-    console.log(data);
     let approveButton;
     if (approved) {
       approveButton = (

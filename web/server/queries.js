@@ -236,7 +236,6 @@ function handleRemoveTracker(req, res) {
 // Public functions
 function handleGetApprovedPublic(req, res, next) {
   try {
-    console.log(req);
     db.any('SELECT * FROM ' + req.body.tag + ' ORDER BY ID DESC') // eslint-disable-line
       .then((dbData) => {
         res.status(200)
